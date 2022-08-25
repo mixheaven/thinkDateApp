@@ -1,6 +1,5 @@
-package com.lebeid.thinkdateapp;
+package com.lebeid.thinkdateapp.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +13,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
+
+import com.lebeid.thinkdateapp.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,13 +68,14 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
 
         mPasswordView.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // TODO : appeler la méthode pour tenter le login
+               Util.isPasswordValid(mPasswordView.getText().toString());
             }
             return false;
         });
 
         mLoginFormView.setOnClickListener(v -> {
             // TODO : appeler la méthode pour tenter le login
+
         });
     }
 

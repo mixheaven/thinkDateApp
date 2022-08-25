@@ -1,4 +1,4 @@
-package com.lebeid.thinkdateapp;
+package com.lebeid.thinkdateapp.activities;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.lebeid.thinkdateapp.R;
 import com.lebeid.thinkdateapp.databinding.ActivityMainBinding;
 
 import android.view.Menu;

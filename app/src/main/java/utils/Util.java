@@ -14,11 +14,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Util {
 
     private static final String PREF_FILE = "pref_file";
     private static final String USER = "user";
+
+    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[%*$_+=])[A-Za-z\\d%*$-+=]{5,}$";
+    private static final Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
 
     public static void setUser(Context context, String json) {
 
@@ -30,13 +35,19 @@ public class Util {
         return null;
     }
 
-    public static boolean isUserNameValid(String userName) {
-        // TODO : écrire votre règle pour un username valide
-        return false;
+    public static boolean isUserNameValid(String email) {
+        if (email.contains("@")) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public static boolean isPasswordValid(String password) {
-        // TODO : écrire votre règle pour un password valide
-       return false;
+
+            Matcher matcher = passwordPattern.matcher(password);
+            return matcher.matches();
+
+
     }
 }

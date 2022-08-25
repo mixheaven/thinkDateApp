@@ -1,4 +1,4 @@
-package com.lebeid.thinkdateapp;
+package com.lebeid.thinkdateapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +13,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         boolean isLoggedOk= false;
           if(isLoggedOk){
-            startActivity(new Intent(this, ListActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         }else {
             startActivity(new Intent(this, LoginActivity.class));
         }

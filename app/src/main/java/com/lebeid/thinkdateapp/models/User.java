@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import utils.Util;
+
 public class User {
 
     public Long id;
