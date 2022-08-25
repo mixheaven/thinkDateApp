@@ -21,6 +21,7 @@ import java.util.Map;
 
 import utils.ApiCallback;
 import utils.Util;
+import utils.UtilApi;
 
 public class LoginActivity extends AppCompatActivity implements ApiCallback {
 
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
                 String email = mEmailView.getText().toString();
                 String password = mPasswordView.getText().toString();
 
-                mLoginFormView.setEnabled(Util.isUserNameValid(email) && Util.isPasswordValid(password));
+                mLoginFormView.setEnabled(Util.isEmailValid(email) && Util.isPasswordValid(password));
             }
         };
 
@@ -74,9 +75,8 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
         });
 
         mLoginFormView.setOnClickListener(v -> {
-            // TODO : appeler la méthode pour tenter le login
-
-        });
+            attemptLogin();
+          });
     }
 
     private void attemptLogin() {
@@ -87,6 +87,9 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
+        Log.d("ATTEMPT LOGIN", email);
+        Log.d("ATTEMPT LOGIN", password);
+
         boolean cancel = false;
         View focusView = null;
 
@@ -94,16 +97,18 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
             mPasswordView.setError(getString(R.string.invalid_password));
             focusView = mPasswordView;
             cancel = true;
+            Log.d("ISPASSWORD VALID", "NO");
         }
 
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!Util.isUserNameValid(email)) {
+        } else if (!Util.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.invalid_username));
             focusView = mEmailView;
             cancel = true;
+            Log.d("ISEMAIL VALID", "NO");
         }
 
         if (cancel) {
@@ -112,11 +117,10 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
             showProgress(true);
 
             Map<String, String> map = new HashMap<>();
-            map.put("username", email);
+            map.put("email", email);
             map.put("password", password);
-
-            // TODO : Appeler la méthode permettant de faire un appel API via POST
-
+            Log.d("SHOW PROGRESS", "LAUNCH REQUEST");
+            UtilApi.post("http://10.0.2.2:8080/users/login", map, this);
         }
     }
 
@@ -128,7 +132,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
     public void fail(final String json) {
         mProgressView.setVisibility(View.INVISIBLE);
         handler.post(() -> {
-            Log.d("lol", "fail: " + json);
+            Log.d("API MESSAGE", "fail: " + json);
             // TODO : Etablisser un comportement lors d'un fail
 
         });
@@ -138,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
     public void success(final String json) {
 
         handler.post(() -> {
-            Log.d("lol", "success: " + json);
+            Log.d("API MESSAGE", "success: " + json);
             // TODO : Etablisser un comportement lors d'un success
             // TODO : Faites la redirection
             

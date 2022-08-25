@@ -22,8 +22,8 @@ public class Util {
     private static final String PREF_FILE = "pref_file";
     private static final String USER = "user";
 
-    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[%*$_+=])[A-Za-z\\d%*$-+=]{5,}$";
-    private static final Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
+    //private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[%*$_+=])[A-Za-z\\d%*$-+=]{5,}$";
+    //private static final Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
 
     public static void setUser(Context context, String json) {
 
@@ -35,7 +35,7 @@ public class Util {
         return null;
     }
 
-    public static boolean isUserNameValid(String email) {
+    public static boolean isEmailValid(String email) {
         if (email.contains("@")) {
             return true;
         }else{
@@ -45,9 +45,18 @@ public class Util {
 
     public static boolean isPasswordValid(String password) {
 
-            Matcher matcher = passwordPattern.matcher(password);
-            return matcher.matches();
+            //Matcher matcher = passwordPattern.matcher(password);
+            //return matcher.matches();
+        return true;
+    }
 
+    public static Date initDateFromDB(String date) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date newDate = formatter.parse(date);
+        return newDate;
+    }
 
+    public static String printDate(Date date) {
+            return String.format("yyyy-MM-dd", date);
     }
 }
