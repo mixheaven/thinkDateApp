@@ -2,6 +2,7 @@ package com.lebeid.thinkdateapp.activities;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,7 +14,10 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,11 +33,17 @@ import com.lebeid.thinkdateapp.models.User;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import utils.ApiCallback;
 import utils.Util;
+import utils.UtilApi;
 
 
 public class MainActivity extends AppCompatActivity implements ApiCallback {
@@ -74,8 +84,9 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", showDialogAddNewBirthday()).show();*/
+                showDialogAddNewBirthday();
             }
         });
     }
@@ -87,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
         return true;
     }
 
-    /*private void showDialogAddNewBirthday() {
+    private void showDialogAddNewBirthday() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         final View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_add_new_birthdate, null);
         final EditText editTextFirstName = view.findViewById(R.id.edit_text_text_first_name);
@@ -116,6 +127,11 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String firstname = editTextFirstName.getText().toString();
+                String lastname = editTextLastName.getText().toString();
+                String date = editTextDate.getText().toString();
+
+                addNewBirthday(date, firstname, lastname);
 
                 // TODO : récupérer les valeurs et appeler la méthode addNewBirthday
 
@@ -124,7 +140,46 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
 
         builder.setNegativeButton(android.R.string.cancel, null);
         builder.create().show();
-    }*/
+    }
+
+    private void addNewBirthday(String dateStr, String firstname, String lastname) {
+        try {
+            if (dateStr == null || dateStr.isEmpty()) {
+                throw new Exception("Date incorrecte");
+            }
+
+            Date date = Util.initDateFromEditText(dateStr);
+
+            if (firstname == null || firstname.isEmpty()) {
+                throw new Exception("Prénom incorrecte");
+            }
+
+            if (lastname == null || lastname.isEmpty()) {
+                throw new Exception("Nom incorrecte");
+            }
+
+            Birthday birthday = new Birthday(date, firstname, lastname);
+
+            // TODO : Appeler la méthode qui ajoute cet anniversaire à la liste des anniversaires de cet utilisateur (comprendre ce que fait la méthode)
+
+            mBirthdayAdapter.setListItems(Util.createListItems(user.birthdays));
+
+            // Appel API POST /users/id/birthdays
+            Map<String, String> map = new HashMap<>();
+            map.put("firstname", birthday.firstname);
+            map.put("lastname", birthday.lastname);
+            map.put("date", Util.printDate(birthday.date));
+
+            String[] id = {user.id.toString()};
+
+            UtilApi.post("http://10.0.2.2:8080/users/" + user.id + "/birthdays", map, this);
+
+        } catch (ParseException e) {
+            Toast.makeText(MainActivity.this, "Date incorrecte", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
