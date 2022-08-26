@@ -1,6 +1,7 @@
 package utils;
 
 import android.os.Handler;
+import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,6 +49,9 @@ public class UtilApi {
         MultipartBody.Builder requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             requestBody.addFormDataPart(entry.getKey(), entry.getValue());
+            Log.d("POST KEY", entry.getKey());
+            Log.d("POST VALUE", entry.getValue());
+            Log.d("POST URL", url);
         }
 
         Request request = new Request.Builder()

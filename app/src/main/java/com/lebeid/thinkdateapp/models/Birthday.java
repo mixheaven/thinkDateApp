@@ -26,8 +26,8 @@ public class Birthday {
         JSONObject jsonObject = new JSONObject(json);
 
         date = Util.initDateFromDB(jsonObject.getString("date"));
-        firstname = jsonObject.getString("firstName");
-        lastname = jsonObject.getString("lastName");
+        firstname = jsonObject.getString("firstname");
+        lastname = jsonObject.getString("lastname");
     }
 
     public Birthday(Date date, String firstname, String lastname) {

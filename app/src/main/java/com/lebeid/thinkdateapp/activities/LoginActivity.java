@@ -1,5 +1,6 @@
 package com.lebeid.thinkdateapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,10 +13,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 import com.lebeid.thinkdateapp.R;
 
+import org.json.JSONException;
+
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +32,9 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
 
     private EditText mEmailView;
     private EditText mPasswordView;
+
+    private TextView mErrorMessage;
+
     private View mProgressView;
     private View mLoginFormView;
 
@@ -40,6 +48,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
         handler = new Handler();
 
         mEmailView = findViewById(R.id.username);
+        mErrorMessage = findViewById(R.id.error_message);
         mPasswordView = findViewById(R.id.password);
         mLoginFormView = findViewById(R.id.login);
         mProgressView = findViewById(R.id.loading);
@@ -133,6 +142,7 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
         mProgressView.setVisibility(View.INVISIBLE);
         handler.post(() -> {
             Log.d("API MESSAGE", "fail: " + json);
+            mErrorMessage.setVisibility(TextView.VISIBLE);
             // TODO : Etablisser un comportement lors d'un fail
 
         });
@@ -143,9 +153,17 @@ public class LoginActivity extends AppCompatActivity implements ApiCallback {
 
         handler.post(() -> {
             Log.d("API MESSAGE", "success: " + json);
-            // TODO : Etablisser un comportement lors d'un success
-            // TODO : Faites la redirection
-            
+            Intent intent = new Intent(this, MainActivity.class);
+            Util.setUser(this, json);
+            try {
+                Log.d("user", Util.getUser(this).lastname);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            startActivity(intent);
+            mProgressView.setVisibility(View.INVISIBLE);
         });
     }
 }

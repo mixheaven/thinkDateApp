@@ -16,7 +16,8 @@ import utils.Util;
 public class User {
 
     public Long id;
-    public String username;
+    public String firstname;
+    public String lastname;
     public String email;
 
     public ArrayList<Birthday> birthdays;
@@ -37,7 +38,8 @@ public class User {
 
         JSONObject jsonObject = new JSONObject(json);
         id = jsonObject.getLong("id");
-        username = jsonObject.getString("username");
+        firstname = jsonObject.getString("firstname");
+        lastname = jsonObject.getString("lastname");
         email = jsonObject.getString("email");
         birthdays = new ArrayList<>();
 
