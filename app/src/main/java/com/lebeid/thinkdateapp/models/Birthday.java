@@ -47,6 +47,9 @@ public class Birthday {
         return json;
     }
 
+    public int getDay() {
+        return date.getDate();
+    }
 
     public static class CustomComparator implements Comparator<Birthday> {
         @Override

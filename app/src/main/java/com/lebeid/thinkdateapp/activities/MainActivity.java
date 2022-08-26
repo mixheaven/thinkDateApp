@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
                 addNewBirthday(date, firstname, lastname);
 
                 // TODO : récupérer les valeurs et appeler la méthode addNewBirthday
-
             }
         });
 
@@ -162,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
 
             // TODO : Appeler la méthode qui ajoute cet anniversaire à la liste des anniversaires de cet utilisateur (comprendre ce que fait la méthode)
 
+            user.birthdays.add(birthday);
             mBirthdayAdapter.setListItems(Util.createListItems(user.birthdays));
 
             // Appel API POST /users/id/birthdays
@@ -208,21 +208,8 @@ public class MainActivity extends AppCompatActivity implements ApiCallback {
     public void success(String json) {
         handler.post(() -> {
             Log.d("HOME MESSAGE", "success: " + json);
+            mBirthdayAdapter.notifyDataSetChanged();
 
         });
-    }
-
-    public void showList(String jsonResponse) {
-        final ObjectMapper objectMapper = new ObjectMapper();
-
-        Birthday birthday = null;
-
-        try {
-            birthday = objectMapper.readValue(jsonResponse, Birthday.class);
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
     }
 }

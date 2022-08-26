@@ -1,9 +1,12 @@
 package utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+
+import androidx.annotation.RequiresApi;
 
 import com.lebeid.thinkdateapp.adapters.BirthdayItem;
 import com.lebeid.thinkdateapp.adapters.ListItem;
@@ -18,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -69,6 +73,8 @@ public class Util {
     public static ArrayList<ListItem> createListItems(ArrayList<Birthday> birthdays) {
 
         ArrayList<ListItem> listItems = new ArrayList<>();
+        /*Collections.sort(birthdays, Comparator.comparing(Birthday::getDay));*/
+        Collections.sort(birthdays, new Birthday.CustomComparator());
 
         int monthNumber = 0;
         String[] months = {"Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"};
@@ -79,6 +85,7 @@ public class Util {
             for (int i = 0; i < birthdays.size(); i++) {
                 if (compare(birthdays.get(i).date, months[monthNumber])) {
                     listItems.add(new BirthdayItem(birthdays.get(i)));
+
                 }
             }
         }
